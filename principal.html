@@ -4,8 +4,9 @@
     <title>Minecraft</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -13,31 +14,20 @@
             background-color: #000; /* Fondo negro */
             color: #fff; /* Texto blanco */
         }
-        #loading {
-            text-align: center;
+        h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #00c3ff; /* Color del título */
         }
-        #loading h1 {
-            color: #00c3ff; /* Color de fondo del texto "Bienvenidos Minecraft Bedrock" */
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 1em;
         }
     </style>
 </head>
 <body>
-    <div id="loading">
-        <h1>MC Infinity History</h1>
-        <h2>Carg... <span id="percent">0</span>%</h2>
-    </div>
-
-    <script>
-        let percent = 0;
-        const percentElement = document.getElementById('percent');
-        const interval = setInterval(() => {
-            percent++;
-            percentElement.innerText = percent;
-            if (percent === 100) {
-                clearInterval(interval);
-                window.location.href = 'https://jrstudios88373.github.io/'; // Cambia 'principal.html' por la URL de tu página principal
-            }
-        }, 75); // El número 50 determina la velocidad de la carga en milisegundos
-    </script>
+    <h1>Minecraft</h1>
+    <footer>©2024</footer>
 </body>
 </html>
