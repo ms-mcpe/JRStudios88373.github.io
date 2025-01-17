@@ -1,21 +1,13 @@
-"use strict";
+import express from "express";
+import path from "path";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
+const app = express();
 
-var _express = _interopRequireDefault(require("express"));
+// settings
+app.set("port", process.env.PORT || 3000);
 
-var _path = _interopRequireDefault(require("path"));
+// static files
+app.use(express.static(path.join(__dirname, "public")));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var app = (0, _express["default"])(); // settings
-
-app.set("port", process.env.PORT || 3000); // static files
-
-app.use(_express["default"]["static"](_path["default"].join(__dirname, "public"))); // starting the server
-
-var _default = app;
-exports["default"] = _default;
+// starting the server
+export default app;

@@ -1,64 +1,75 @@
-"use strict";
-
 $(function () {
   // socket.io client side connection
-  var socket = io.connect(); // obtaining DOM elements from the Chat Interface
+  const socket = io.connect();
 
-  var $messageForm = $("#message-form");
-  var $messageBox = $("#message");
-  var $chat = $("#chat"); // obtaining DOM elements from the NicknameForm Interface
+  // obtaining DOM elements from the Chat Interface
+  const $messageForm = $("#message-form");
+  const $messageBox = $("#message");
+  const $chat = $("#chat");
 
-  var $nickForm = $("#nickForm");
-  var $nickError = $("#nickError");
-  var $nickname = $("#nickname"); // obtaining the usernames container DOM
+  // obtaining DOM elements from the NicknameForm Interface
+  const $nickForm = $("#nickForm");
+  const $nickError = $("#nickError");
+  const $nickname = $("#nickname");
 
-  var $users = $("#usernames");
-  $nickForm.submit(function (e) {
+  // obtaining the usernames container DOM
+  const $users = $("#usernames");
+
+  $nickForm.submit((e) => {
     e.preventDefault();
-    socket.emit("new user", $nickname.val(), function (data) {
+    socket.emit("new user", $nickname.val(), (data) => {
       if (data) {
-        $("#nickWrap").hide(); // $('#contentWrap').show();
-
+        $("#nickWrap").hide();
+        // $('#contentWrap').show();
         document.querySelector("#contentWrap").style.display = "flex";
         $("#message").focus();
       } else {
-        $nickError.html("\n            <div class=\"alert alert-danger\">\n              That username already Exists.\n            </div>\n          ");
+        $nickError.html(`
+            <div class="alert alert-danger">
+              That username already Exists.
+            </div>
+          `);
       }
     });
     $nickname.val("");
-  }); // events
+  });
 
-  $messageForm.submit(function (e) {
+  // events
+  $messageForm.submit((e) => {
     e.preventDefault();
-    socket.emit("send message", $messageBox.val(), function (data) {
-      $chat.append("<p class=\"error\">".concat(data, "</p>"));
+    socket.emit("send message", $messageBox.val(), (data) => {
+      $chat.append(`<p class="error">${data}</p>`);
     });
     $messageBox.val("");
   });
-  socket.on("new message", function (data) {
+
+  socket.on("new message", (data) => {
     displayMsg(data);
   });
-  socket.on("usernames", function (data) {
-    var html = "";
 
+  socket.on("usernames", (data) => {
+    let html = "";
     for (i = 0; i < data.length; i++) {
-      html += "<p><i class=\"fas fa-user\"></i> ".concat(data[i], "</p>");
+      html += `<p><i class="fas fa-user"></i> ${data[i]}</p>`;
     }
-
     $users.html(html);
   });
-  socket.on("whisper", function (data) {
-    $chat.append("<p class=\"whisper\"><b>".concat(data.nick, "</b>: ").concat(data.msg, "</p>"));
+
+  socket.on("whisper", (data) => {
+    $chat.append(`<p class="whisper"><b>${data.nick}</b>: ${data.msg}</p>`);
   });
-  socket.on("load old msgs", function (msgs) {
-    for (var _i = msgs.length - 1; _i >= 0; _i--) {
-      displayMsg(msgs[_i]);
+
+  socket.on("load old msgs", (msgs) => {
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      displayMsg(msgs[i]);
     }
   });
 
   function displayMsg(data) {
-    $chat.append("<p class=\"p-2 bg-secondary w-75 animate__animated animate__backInUp\"><b>".concat(data.nick, "</b>: ").concat(data.msg, "</p>"));
-    var chat = document.querySelector("#chat");
+    $chat.append(
+      `<p class="p-2 bg-secondary w-75 animate__animated animate__backInUp"><b>${data.nick}</b>: ${data.msg}</p>`
+    );
+    const chat = document.querySelector("#chat");
     chat.scrollTop = chat.scrollHeight;
   }
 });
